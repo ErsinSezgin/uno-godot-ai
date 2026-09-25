@@ -70,7 +70,7 @@ Each task is intentionally small enough to fit comfortably inside a ~40k context
   - Replenishing preserves the active top card.
   - Wild-card state needed for the active color is not accidentally lost.
 
-### T008 — Implement player model
+### T008 — [x] Implement player model
 - Goal: Represent a session player with ID, display name, hand, score, and connection-ready metadata.
 - Acceptance:
   - Player data can be created and serialized to a plain Dictionary.
