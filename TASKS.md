@@ -407,3 +407,5 @@ Each task is intentionally small enough to fit comfortably inside a ~40k context
 8. Never trust client-provided card legality, turn ownership, scores, or random outcomes.
 9. Do not add accounts, databases, matchmaking, cosmetics, chat, or monetization unless a later task explicitly asks for them.
 10. When uncertain, stop and document the ambiguity instead of implementing a large speculative feature.
+
+11. Always commit your changes to remote `origin` after finishing a task.
