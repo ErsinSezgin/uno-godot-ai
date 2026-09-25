@@ -76,7 +76,7 @@ Each task is intentionally small enough to fit comfortably inside a ~40k context
   - Player data can be created and serialized to a plain Dictionary.
   - No UI/networking.
 
-### T009 — Implement pure card legality checks
+### T009 — [x] Implement pure card legality checks
 - Goal: Decide whether a card is playable against the current top card and active color.
 - Acceptance:
   - Same color works.

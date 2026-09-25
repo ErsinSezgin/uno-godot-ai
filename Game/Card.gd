@@ -40,6 +40,10 @@ func matches_type(target_type: int) -> bool:
 		return true
 	return card_type == target_type
 
+## Returns true if this card can legally be played against top_card and active_color.
+func is_playable_on(top_card: Card, active_color: int = Constants.CardColor.WILD) -> bool:
+	return Rules.is_card_legal(self, top_card, active_color)
+
 func is_same_as(other: Card) -> bool:
 	if other == null:
 		return false
