@@ -56,7 +56,7 @@ Each task is intentionally small enough to fit comfortably inside a ~40k context
   - Wild cards are represented correctly.
   - Deck can be created repeatedly without shared mutable state.
 
-### T006 — Implement shuffle and draw pile
+### T006 — [x] Implement shuffle and draw pile
 - Goal: Add a shuffled draw pile abstraction.
 - Acceptance:
   - Shuffle changes order.
