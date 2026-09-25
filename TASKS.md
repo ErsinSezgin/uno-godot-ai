@@ -63,7 +63,7 @@ Each task is intentionally small enough to fit comfortably inside a ~40k context
   - Drawing removes cards from the draw pile.
   - Drawing from an empty pile is handled explicitly.
 
-### T007 — Implement discard pile and reshuffle support
+### T007 — [x] Implement discard pile and reshuffle support
 - Goal: Add discard pile handling and a method to replenish the draw pile from eligible discarded cards.
 - Acceptance:
   - Top discard is tracked.

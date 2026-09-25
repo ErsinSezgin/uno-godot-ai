@@ -153,3 +153,11 @@ func count_wilds() -> int:
 		if c.is_wild():
 			count += 1
 	return count
+
+## Replenishes this deck from eligible cards in the discard pile.
+## Preserves the discard pile's active top card and active color.
+func replenish_from_discard(discard_pile: DiscardPile, rng: RandomNumberGenerator = null) -> int:
+	if discard_pile == null:
+		return 0
+	return discard_pile.replenish_deck(self, rng)
+

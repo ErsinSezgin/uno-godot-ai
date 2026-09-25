@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://b78c213m1rk51"]
+
+[ext_resource type="Script" path="res://tests/TestDiscard.gd" id="1_discard_test"]
+
+[node name="TestDiscard" type="Node"]
+script = ExtResource("1_discard_test")
