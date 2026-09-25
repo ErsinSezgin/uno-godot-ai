@@ -1,0 +1,116 @@
+# Godot Engine project file
+.project.godot
+
+# Build artifacts
+build/
+project_builds/
+
+# Exported assets (platform exports)
+exports_*/
+
+# Node files / scene cache
+.node
+.tscn.cache
+
+# Exported/compiled assets
+*.blend
+*.blend.a
+*.obj
+*.obj.bak
+*.fbx
+*.fbxa
+*.gltf
+*.glb
+*.usdz
+*.usdz_a
+*.png.cache
+*.png.0.png
+*.png.1.png
+*.png.2.png
+*.png.3.png
+*.png.4.png
+*.png.5.png
+*.png.6.png
+*.png.7.png
+*.png.8.png
+*.png.9.png
+
+# Node preview cache
+.node_preview_cache/
+
+# .godot project file (if used)
+.project.godot
+.project.godot.backup
+
+# Unstaged .godot files / backup
+*.godot
+*.godot.bak
+*.godot.old
+
+# .blend cache
+*.blend.cache
+
+# Godot export directories (platform-specific)
+exports_*/
+
+# .tscn files with preview cache
+*.tscn.cache
+
+# .blend files (auto-generated)
+.blend.*
+
+# .blend.a / .blend.bak
+*.blend.a
+*.blend.bak
+
+# .obj preview and cache files
+*.obj.cache
+*.obj.preview
+*.obj.a
+*.obj.bak
+
+# .blend preview cache
+*.blend.preview
+
+# Godot's auto-generated binary
+*.godot
+
+# .blend preview files
+*.blend.preview
+
+# .obj cache files
+*.obj.cache
+*.obj.a
+*.obj.bak
+
+# .blend preview and cache files
+*.blend.preview
+*.blend.cache
+
+# .blend.a / .blend.bak
+*.blend.a
+*.blend.bak
+
+# Godot preview cache
+.node_preview_cache/
+
+# .gd preview data
+.gd_preview/
+
+# .blend preview and cache files
+*.blend.preview
+*.blend.cache
+
+# .obj cache and backup
+*.obj.cache
+*.obj.a
+*.obj.bak
+
+# .blend preview and cache
+*.blend.preview
+*.blend.cache
+
+# .obj preview and cache
+*.obj.preview
+*.obj.a
+*.obj.bak

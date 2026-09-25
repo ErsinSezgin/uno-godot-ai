@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="336" viewBox="0 0 240 336">
+<rect x="4" y="4" width="232" height="328" rx="25" fill="#111111" stroke="#FFFFFF" stroke-width="8"/>
+<path d="M28 87 C66 39 161 37 210 88 C161 122 79 126 28 87 Z" fill="none" stroke="#FFFFFF" stroke-width="5" opacity=".9"/>
+<path d="M30 260 C76 309 161 307 209 258" fill="none" stroke="#FFFFFF" stroke-width="5" opacity=".9"/>
+<text x="25" y="50" font-family="DejaVu Sans" font-size="34" font-weight="900" fill="#FFFFFF">SWAP</text>
+<text x="215" y="315" text-anchor="end" font-family="DejaVu Sans" font-size="34" font-weight="900" fill="#FFFFFF">SWAP</text>
+
+        <circle cx="120" cy="168" r="77" fill="#111111" stroke="#FFFFFF" stroke-width="8"/>
+        <path d="M72 143 C90 118 117 109 144 119" fill="none" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round"/>
+        <path d="M141 103 L159 119 L137 125" fill="none" stroke="#FFFFFF" stroke-width="10" stroke-linejoin="round"/>
+        <path d="M168 193 C150 218 123 227 96 217" fill="none" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round"/>
+        <path d="M99 233 L81 217 L103 211" fill="none" stroke="#FFFFFF" stroke-width="10" stroke-linejoin="round"/>
+        
+</svg>
