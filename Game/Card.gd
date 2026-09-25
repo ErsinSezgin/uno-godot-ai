@@ -1,74 +1,102 @@
-extends Node
+class_name Card
+extends RefCounted
 
-import '../Constants.gd'
+## Represents a single UNO card.
+## A card has a color (Red, Yellow, Blue, Green, or Wild) and a card_type (0-9, Skip, Reverse, Draw Two, Wild, Wild Draw Four).
 
-# Represents a single UNO card.
-# A card has an action type (color or type) and a value that identifies it within that type.
-# Wild cards have value 0; normal action cards have values 1-9.
+var color: Constants.CardColor = Constants.CardColor.WILD
+var card_type: Constants.CardType = Constants.CardType.NUMBER_0
+var value: int = 0
 
-var type: ActionType
-var value: int
-
-func new(type: ActionType, value: int) -> "Game.Card":
-    self.type = type
-    self.value = value
-
-func __repr__() -> String:
-    return "Card(type={self.type}, value={self.value})"
-
-func to_dict() -> Dict[str, any]:
-    return {
-        "type": self.type,
-        "value": self.value
-    }
-
-func from_dict(data: Dict[str, any]) -> "Game.Card":
-    self.type = data["type"]
-    self.value = data["value"]
-
-# Convenience: create a wild color card for a given Color.
-func new_wild_color(color: Color) -> "Game.Card":
-    self.type = ActionType.COLOR
-    self.value = 0
-    return self
-
-# Convenience: create a wild action card.
-func new_wild_action() -> "Game.Card":
-    self.type = ActionType.TYPE
-    self.value = 0
-    return self
-
-# Convenience: create a normal action card (value 1-9).
-func new_action(value: int) -> "Game.Card":
-    self.type = ActionType.COLOR
-    self.value = value
-    return self
-
-# Convenience: create a type-card (value 1-9).
-func new_type_card(value: int) -> "Game.Card":
-    self.type = ActionType.TYPE
-    self.value = value
-    return self
+func _init(p_color: int = Constants.CardColor.WILD, p_type: int = Constants.CardType.NUMBER_0, p_value: int = -1) -> void:
+	color = p_color as Constants.CardColor
+	card_type = p_type as Constants.CardType
+	if p_value >= 0:
+		value = p_value
+	elif p_type >= Constants.CardType.NUMBER_0 and p_type <= Constants.CardType.NUMBER_9:
+		value = int(p_type)
+	else:
+		value = -1
 
 func is_wild() -> bool:
-    # Value 0 indicates a wild card (wild color or wild action).
-    return self.value == 0
+	return card_type == Constants.CardType.WILD or card_type == Constants.CardType.WILD_DRAW_FOUR or color == Constants.CardColor.WILD
 
-func matches_color(color: Color) -> bool:
-    # A card matches a color if it is that color or wild.
-    if self.is_wild():
-        return true
-    match self.type:
-        ActionType.COLOR => self.value == color  # Action cards are indexed by their Color enum value
-        _ => false
+func is_action() -> bool:
+	return card_type == Constants.CardType.SKIP or card_type == Constants.CardType.REVERSE or card_type == Constants.CardType.DRAW_TWO
 
-func matches_action_type(at: ActionType) -> bool:
-    # A card matches an action type if it is that type or wild.
-    if self.is_wild():
-        return true
-    match self.type:
-        ActionType.COLOR => at == ActionType.COLOR
-        ActionType.TYPE  => at == ActionType.TYPE
+func is_number() -> bool:
+	return card_type >= Constants.CardType.NUMBER_0 and card_type <= Constants.CardType.NUMBER_9
 
-func is_same_as(other: "Game.Card") -> bool:
-    return self.type == other.type and self.value == other.value
+func get_points() -> int:
+	return Constants.CARD_POINTS.get(card_type, 0)
+
+func matches_color(target_color: int) -> bool:
+	if is_wild() or target_color == Constants.CardColor.WILD:
+		return true
+	return color == target_color
+
+func matches_type(target_type: int) -> bool:
+	if is_wild():
+		return true
+	return card_type == target_type
+
+func is_same_as(other: Card) -> bool:
+	if other == null:
+		return false
+	return color == other.color and card_type == other.card_type and value == other.value
+
+func to_dict() -> Dictionary:
+	return {
+		"color": int(color),
+		"type": int(card_type),
+		"value": value,
+	}
+
+static func from_dict(data: Dictionary) -> Card:
+	var c: int = data.get("color", Constants.CardColor.WILD)
+	var t: int = data.get("type", Constants.CardType.NUMBER_0)
+	var v: int = data.get("value", -1)
+	return Card.new(c, t, v)
+
+func _to_string() -> String:
+	if card_type == Constants.CardType.WILD:
+		return "Wild"
+	if card_type == Constants.CardType.WILD_DRAW_FOUR:
+		return "Wild Draw Four"
+	var col_name: String = Constants.COLOR_NAMES.get(color, "Unknown")
+	var type_name: String = Constants.TYPE_NAMES.get(card_type, str(value))
+	return "%s %s" % [col_name, type_name]
+
+## Helper to get the SVG asset path for this card
+func get_asset_path() -> String:
+	if card_type == Constants.CardType.WILD:
+		return "res://resources/cards/wild.svg"
+	if card_type == Constants.CardType.WILD_DRAW_FOUR:
+		return "res://resources/cards/wild_draw4.svg"
+	var col_str: String = ""
+	match color:
+		Constants.CardColor.RED: col_str = "red"
+		Constants.CardColor.YELLOW: col_str = "yellow"
+		Constants.CardColor.BLUE: col_str = "blue"
+		Constants.CardColor.GREEN: col_str = "green"
+		_: col_str = "wild"
+	var type_str: String = ""
+	match card_type:
+		Constants.CardType.SKIP: type_str = "skip"
+		Constants.CardType.REVERSE: type_str = "reverse"
+		Constants.CardType.DRAW_TWO: type_str = "draw2"
+		_: type_str = str(value)
+	return "res://resources/cards/%s_%s.svg" % [col_str, type_str]
+
+## Static factory methods for convenience
+static func create_number(p_color: Constants.CardColor, p_num: int) -> Card:
+	return Card.new(p_color, p_num as Constants.CardType, p_num)
+
+static func create_action(p_color: Constants.CardColor, p_type: Constants.CardType) -> Card:
+	return Card.new(p_color, p_type, -1)
+
+static func create_wild() -> Card:
+	return Card.new(Constants.CardColor.WILD, Constants.CardType.WILD, -1)
+
+static func create_wild_draw_four() -> Card:
+	return Card.new(Constants.CardColor.WILD, Constants.CardType.WILD_DRAW_FOUR, -1)

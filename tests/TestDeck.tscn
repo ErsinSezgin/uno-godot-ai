@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://c65b162l0qk40"]
+
+[ext_resource type="Script" path="res://tests/TestDeck.gd" id="1_deck_test"]
+
+[node name="TestDeck" type="Node"]
+script = ExtResource("1_deck_test")

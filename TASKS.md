@@ -49,7 +49,7 @@ Each task is intentionally small enough to fit comfortably inside a ~40k context
   - String/debug representation is useful.
   - No UI required.
 
-### T005 — Implement deck construction
+### T005 — [x] Implement deck construction
 - Goal: Build the standard UNO deck data set.
 - Acceptance:
   - Deck contains the intended standard card counts.

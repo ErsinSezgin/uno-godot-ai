@@ -1,6 +1,6 @@
-{
-	"extends": "Node",
-	"_ready()": {
-		".node._run()"
-	}
-}
+[gd_scene load_steps=2 format=3 uid="uid://c65b162l0qk39"]
+
+[ext_resource type="Script" path="res://tests/TestCard.gd" id="1_test"]
+
+[node name="TestCard" type="Node"]
+script = ExtResource("1_test")

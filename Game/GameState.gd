@@ -1,15 +1,14 @@
+class_name GameState
 extends Node
 
-# Placeholder: GameState data model for the authoritative game state.
-# This will be expanded in later tasks to hold players, deck, turn order, etc.
+## Placeholder: GameState data model for the authoritative game state.
+## This will be expanded in later tasks to hold players, deck, turn order, etc.
 
-import '../Constants.gd'
-
-var round_state: Dict[str, any] = {}
-var scores: Dict[str, any] = {}
-# Current player index (0-based). Use Constants.MIN_PLAYER_COUNT as the minimum valid count.
+var round_state: Dictionary = {}
+var scores: Dictionary = {}
+var current_player: int = -1
 
 func reset_round() -> void:
-    round_state.clear()
-    scores.clear()
-    current_player = -1
+	round_state.clear()
+	scores.clear()
+	current_player = -1

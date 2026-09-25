@@ -1,143 +1,155 @@
-# Deck construction for offline UNO gameplay.
+class_name Deck
+extends RefCounted
 
-# Builds a fresh, standard UNO deck (78 cards) with no shared mutable state.
-# Each call to create() returns a brand-new Deck instance so that multiple
-# decks can coexist (e.g. for parallel simulations).
+## Manages an UNO deck / draw pile.
+## In standard UNO, a fresh deck consists of 108 cards:
+## - 4 suits (Red, Yellow, Blue, Green), each having 25 cards:
+##   - 1 '0' card
+##   - 2 each of '1' through '9' (18 cards)
+##   - 2 Skip cards
+##   - 2 Reverse cards
+##   - 2 Draw Two cards
+##   (25 * 4 = 100 colored cards)
+## - 4 Wild cards
+## - 4 Wild Draw Four cards
+## Total: 108 cards.
 
-from typing import Optional
+var cards: Array[Card] = []
 
-import '../Constants.gd'
-import '../Card.gd'
+func _init(auto_build: bool = true) -> void:
+	if auto_build:
+		build_standard_deck()
 
-# A deck is an ordered list of Card objects. The order represents the draw
-# pile from bottom to top, with `top_card` being the one at the end of the
-# list (index -1).  Repeated calls to `create()` produce independent decks.
+## Builds a fresh standard 108-card UNO deck.
+## Creates brand-new Card instances so there is no shared mutable state.
+func build_standard_deck() -> void:
+	cards.clear()
+	cards = create_standard_cards()
 
-var _seed: Optional[int] = null
+## Static factory that returns a fresh Array[Card] with the standard 108 UNO cards.
+## Can be called repeatedly without shared mutable state.
+static func create_standard_cards() -> Array[Card]:
+	var result: Array[Card] = []
 
-var cards: List[Card]
-var top_card: Card  # alias for convenience; always cards[-1] when not empty
+	# For each of the 4 colors:
+	for color in Constants.COLORS:
+		# 1 '0' card
+		result.append(Card.create_number(color, 0))
 
-# ---------------------------------------------------------------------------
-# Factory
-# ---------------------------------------------------------------------------
+		# 2 each of '1' through '9'
+		for num in range(1, 10):
+			result.append(Card.create_number(color, num))
+			result.append(Card.create_number(color, num))
 
-func create(seed: Optional[int] = null) -> "Game.Deck":
-    self._set_seed(seed)
-    self.cards.clear()
-    _build_standard_deck()
-    return self
+		# 2 Skip cards
+		result.append(Card.create_action(color, Constants.CardType.SKIP))
+		result.append(Card.create_action(color, Constants.CardType.SKIP))
 
-# ---------------------------------------------------------------------------
-# Internal deck assembly ---------------------------------------------------
+		# 2 Reverse cards
+		result.append(Card.create_action(color, Constants.CardType.REVERSE))
+		result.append(Card.create_action(color, Constants.CardType.REVERSE))
 
-func _build_standard_deck() -> void:
-    # Phase 1 — colour action cards (4 colours × values 1..9 = 36)
-    for color in Constants.COLORS:
-        for value in range(1, 10):
-            self.cards.append(Card.new(ActionType.COLOR, value))
+		# 2 Draw Two cards
+		result.append(Card.create_action(color, Constants.CardType.DRAW_TWO))
+		result.append(Card.create_action(color, Constants.CardType.DRAW_TWO))
 
-    # Phase 2 — type action cards (9 types × 4 colours = 36)
-    for color in Constants.COLORS:
-        for value in range(1, 10):
-            self.cards.append(Card.new(ActionType.TYPE, value))
+	# 4 Wild cards
+	for _i in range(4):
+		result.append(Card.create_wild())
 
-    # Phase 3 — wild colour cards (one per Colour enum = 4)
-    for color in Constants.COLORS:
-        self.cards.append(Card.new_wild_color(color))
+	# 4 Wild Draw Four cards
+	for _i in range(4):
+		result.append(Card.create_wild_draw_four())
 
-    # Phase 4 — wild action cards (2)
-    for _ in range(2):
-        self.cards.append(Card.new_wild_action())
+	return result
 
-# ---------------------------------------------------------------------------
-# Seed helper for deterministic shuffling (useful for tests)
-# ---------------------------------------------------------------------------
-
-func _set_seed(seed: Optional[int]) -> void:
-    if seed is not null:
-        self._seed = seed
-
-# ---------------------------------------------------------------------------
-# Property accessors --------------------------------------------------------
-
-@export var is_empty() -> bool:
-    return len(self.cards) == 0
-
-# Returns the top card (draw pile face-up) or null when empty.
-func top_card_property() -> Card:
-    if is_empty():
-        return null
-    return self.cards[-1]
-
-# ---------------------------------------------------------------------------
-# Utility helpers -----------------------------------------------------------
-
+## Returns the number of cards currently in the deck.
 func card_count() -> int:
-    return len(self.cards)
+	return cards.size()
 
-# Return a defensive copy of the entire deck so callers cannot mutate
-# the internal list.  Useful for serialisation, snapshots, or tests.
-func to_list() -> List[Card]:
-    return self.cards.clone()
+## Returns true if the deck has no cards.
+func is_empty() -> bool:
+	return cards.is_empty()
 
-# ---------------------------------------------------------------------------
-# Shuffle and draw pile -----------------------------------------------------
+## Shuffles the deck cards in-place using Fisher-Yates algorithm.
+## An optional RandomNumberGenerator can be provided for deterministic tests.
+func shuffle(rng: RandomNumberGenerator = null) -> void:
+	if cards.is_empty():
+		return
+	var n: int = cards.size()
+	for i in range(n - 1, 0, -1):
+		var j: int
+		if rng != null:
+			j = rng.randi_range(0, i)
+		else:
+			j = randi() % (i + 1)
+		var tmp: Card = cards[i]
+		cards[i] = cards[j]
+		cards[j] = tmp
 
-func shuffle() -> None:
-    """Shuffle the deck using a deterministic Fisher-Yates algorithm.
-
-    Re-seed internally if `seed` is set during `create_custom()` so that
-    tests can reproduce the same shuffled order.
-    """
-    if is_empty():
-        return
-
-    # Fisher-Yates (Knuth) shuffle — O(n), in-place.
-    for i in range(len(self.cards) - 1, 0, -1):
-        j = _random_int(0, i)
-        self.cards[i], self.cards[j] = self.cards[j], self.cards[i]
-
+## Draws the top card from the deck.
+## Returns null if the deck is empty (explicitly handled).
 func draw() -> Card:
-    """Remove and return the top card from the deck.
+	if cards.is_empty():
+		return null
+	return cards.pop_back()
 
-    Returns null when the deck is empty (explicit handling — no exceptions).
-    """
-    if is_empty():
-        return null
+## Draws multiple cards from the deck.
+## Returns an array containing the drawn cards (up to count, or fewer if empty).
+func draw_cards(count: int) -> Array[Card]:
+	var drawn: Array[Card] = []
+	for _i in range(count):
+		var c: Card = draw()
+		if c == null:
+			break
+		drawn.append(c)
+	return drawn
 
-    removed = self.cards.pop(-1)
-    return removed
+## Adds a card to the bottom of the deck (or top if to_top is true).
+func add_card(card: Card, to_top: bool = false) -> void:
+	if card == null:
+		return
+	if to_top:
+		cards.append(card)
+	else:
+		cards.push_front(card)
 
-# ---------------------------------------------------------------------------
-# Random helpers ------------------------------------------------------------
+## Adds multiple cards to the deck.
+func add_cards(new_cards: Array[Card], to_top: bool = false) -> void:
+	for c in new_cards:
+		add_card(c, to_top)
 
-func _random_int(min_val: int, max_val: int) -> int:
-    """Simple pseudo-random integer in [min, max].
+## Returns a shallow clone of the deck with copies of the card references,
+## or deep clone if deep is true.
+func clone(deep: bool = false) -> Deck:
+	var new_deck: Deck = Deck.new(false)
+	if deep:
+		for c in cards:
+			new_deck.cards.append(Card.from_dict(c.to_dict()))
+	else:
+		new_deck.cards = cards.duplicate()
+	return new_deck
 
-    For games that need cryptographic quality randomness or a specific seed,
-    override this method in a derived class or call from the appropriate
-    testing wrapper.
-    """
-    if _seed is not null:
-        return min_val + int(self._seed * 0.618034) % (max_val - min_val + 1)
+## Counts cards matching a specific color.
+func count_by_color(target_color: Constants.CardColor) -> int:
+	var count: int = 0
+	for c in cards:
+		if c.color == target_color:
+			count += 1
+	return count
 
-    # Use GDScript's built-in randi() for pseudo-random values in [0, 1)
-    return int(randi() * (max_val - min_val + 1)) + min_val
+## Counts cards matching a specific card type.
+func count_by_type(target_type: Constants.CardType) -> int:
+	var count: int = 0
+	for c in cards:
+		if c.card_type == target_type:
+			count += 1
+	return count
 
-# ---------------------------------------------------------------------------
-# Convenience: build a deck of exactly `count` cards (for testing / edge
-# case coverage) while still honouring the standard distribution.
-# ---------------------------------------------------------------------------
-
-func create_custom(count: int, seed: Optional[int] = null) -> "Game.Deck":
-    deck = Deck()
-    deck._set_seed(seed)
-    deck.cards.clear()
-    _build_standard_deck()
-
-    # If the requested count is smaller than 78, take the first N cards.
-    if count < deck.card_count():
-        deck.cards = deck.cards[:count]
-
-    return deck
+## Counts wild cards (Wild and Wild Draw Four).
+func count_wilds() -> int:
+	var count: int = 0
+	for c in cards:
+		if c.is_wild():
+			count += 1
+	return count
