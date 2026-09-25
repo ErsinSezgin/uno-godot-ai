@@ -93,7 +93,7 @@ Each task is intentionally small enough to fit comfortably inside a ~40k context
   - Skip can advance correctly.
   - Edge cases wrap around.
 
-### T011 — Implement round setup
+### T011 — [x] Implement round setup
 - Goal: Create a fresh round state: players, deck, initial hands, discard card, active color, current player.
 - Acceptance:
   - Valid starting state is produced.
