@@ -1,0 +1,6 @@
+{
+	"extends": "Node",
+	"_ready()": {
+		".node._run()"
+	}
+}
