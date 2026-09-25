@@ -4,3 +4,21 @@
 
 [node name="Main" type="Node"]
 script = ExtResource("1")
+
+[node name="PlaceholderLabel" type="Control2D"]
+layout/anchor_x_anchor_type="center" layout/anchor_y_anchor_type="center"
+layout/stretch_factor=1.0
+layout/stretch_x=1.0 layout/stretch_y=1.0
+
+[node name="PlaceholderText" type="AutoResizeLabel"]
+text="UNO Multiplayer"
+font_name="monospace"
+font_size=32
+text_color=rgb(255, 255, 255)
+
+[node name="SubtitleLabel" type="Label"]
+text="This project is under development.\n\nRunning in Godot 4.x"
+font_name="monospace"
+font_size=16
+text_color=rgb(200, 200, 200)
+align_x="center" align_y="center"
