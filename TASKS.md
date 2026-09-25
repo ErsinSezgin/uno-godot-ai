@@ -42,7 +42,7 @@ Each task is intentionally small enough to fit comfortably inside a ~40k context
 
 ## Phase 1 — Offline UNO model
 
-### T004 — Implement card data object
+### T004 — [x] Implement card data object
 - Goal: Represent one UNO card with color and type/value.
 - Acceptance:
   - Card can be created and inspected.
