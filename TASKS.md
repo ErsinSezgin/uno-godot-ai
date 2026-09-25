@@ -23,7 +23,7 @@ Each task is intentionally small enough to fit comfortably inside a ~40k context
   - No parser/runtime errors.
 - Do not add gameplay.
 
-### T002 — Create folder/module skeleton
+### T002 — [x] Create folder/module skeleton
 - Goal: Create the planned `Game/`, `Net/`, and `UI/` directories and empty/minimal scripts.
 - Acceptance:
   - Folders exist.
@@ -31,7 +31,7 @@ Each task is intentionally small enough to fit comfortably inside a ~40k context
   - Project still runs.
 - Do not implement networking or rules.
 
-### T003 — Add shared game constants
+### T003 — [x] Add shared game constants
 - Goal: Add a small constants/data definition for UNO colors, action types, and player limits.
 - Acceptance:
   - Constants are accessible from gameplay code.
