@@ -85,7 +85,7 @@ Each task is intentionally small enough to fit comfortably inside a ~40k context
   - Invalid cards are rejected.
   - Logic is deterministic and has no UI dependency.
 
-### T010 — Implement turn-order helpers
+### T010 — [x] Implement turn-order helpers
 - Goal: Add helpers for next/previous player and direction reversal.
 - Acceptance:
   - 2+ player order works.

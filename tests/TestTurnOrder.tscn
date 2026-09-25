@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://f50a436p4um84"]
+
+[ext_resource type="Script" path="res://tests/TestTurnOrder.gd" id="1_turn_order_test"]
+
+[node name="TestTurnOrder" type="Node"]
+script = ExtResource("1_turn_order_test")
