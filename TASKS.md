@@ -2,6 +2,8 @@
 
 Implement exactly one unchecked task per session unless a task explicitly says otherwise.
 
+**Session tracking:** The next agent should read this file to see which tasks are complete. Tasks marked `[x]` are done; `[ ]` need to be implemented.
+
 Status convention:
 - `[ ]` not started
 - `[x]` complete
@@ -12,7 +14,7 @@ Each task is intentionally small enough to fit comfortably inside a ~40k context
 
 ## Phase 0 — Project foundation
 
-### T001 — Verify Godot project skeleton
+### T001 — [x] Verify Godot project skeleton (done)
 - Goal: Make sure the project opens and runs.
 - Files: `project.godot`, `Main.tscn`, `Main.gd`.
 - Acceptance:
